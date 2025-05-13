@@ -1,10 +1,18 @@
-.conteiner {
+.main {
   height: 90vh;
   width: 100vw;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.container{
+  width: 100%;
+  max-width: 36rem;
+  border-radius: 0.5rem;
+  box-shadow: 0px 0px 20px rgba(128, 128, 128, 0.662);
+  overflow: hidden;
 }
 
 .card {

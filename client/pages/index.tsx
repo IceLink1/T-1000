@@ -8,7 +8,7 @@ import DefaultLayout from "@/layouts/default";
 import Link from "next/link";
 
 export default function IndexPage() {
-  const questions = [
+  const subjects = [
     { id: 1, title: "Math" },
     { id: 2, title: "English" },
     { id: 3, title: "Chemistry" },
@@ -22,10 +22,12 @@ export default function IndexPage() {
     <DefaultLayout>
       <section className={styles.home}>
         <div className={styles["items"]}>
-          {questions.map((question) => (
-            <Link href={`/questions?subject=${question.title}`} key={question.id}>
+          {subjects.map((subject) => (
+            <Link href={`/questions?subject=${subject.title}`} key={subject.id}>
               <div className={styles["conteiner"]}>
-                <h1>{question.title}</h1>
+                <div>
+                  <h1>{subject.title}</h1>
+                </div>
               </div>
             </Link>
           ))}
