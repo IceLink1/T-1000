@@ -7,19 +7,31 @@
   justify-content: center;
 }
 
-.container{
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.container {
   width: 100%;
   max-width: 36rem;
   border-radius: 0.5rem;
-  box-shadow: 0px 0px 20px rgba(128, 128, 128, 0.662);
   overflow: hidden;
+  h1{
+    text-align: center;
+    margin: 20px;
+    font-size: xx-large;
+  }
 }
 
 .card {
   width: 100%;
   max-width: 36rem;
+  padding: 20px;
   border-radius: 0.5rem;
-  box-shadow: 0px 0px 20px rgba(128, 128, 128, 0.662);
+  border: 2px solid #2563eb;
+
   overflow: hidden;
 }
 

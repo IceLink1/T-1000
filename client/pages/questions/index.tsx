@@ -18,11 +18,13 @@ export default function IndexPage() {
       <section className={styles["main"]}>
         <div className={styles["container"]}>
           <h1>{subject}</h1>
+          <div className={styles["list"]}>
           {questions.map((question) => (
             <Link href={`/questions/1`}>
               <div className={styles["card"]}>afwofahwdiawudh</div>
             </Link>
           ))}
+          </div>
         </div>
       </section>
     </DefaultLayout>
