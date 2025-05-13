@@ -1,0 +1,36 @@
+"use client";
+
+import { useState } from "react";
+
+import styles from "./Home.module.css";
+
+import DefaultLayout from "@/layouts/default";
+import Link from "next/link";
+
+export default function IndexPage() {
+  const questions = [
+    { id: 1, title: "Math" },
+    { id: 2, title: "English" },
+    { id: 3, title: "Chemistry" },
+    { id: 4, title: "Biology" },
+    { id: 5, title: "Geography" },
+    { id: 6, title: "History" },
+    { id: 7, title: "Literature" },
+    { id: 8, title: "Philosophy" },
+  ];
+  return (
+    <DefaultLayout>
+      <section className={styles.home}>
+        <div className={styles["items"]}>
+          {questions.map((question) => (
+            <div className={styles['conteiner']}>
+              <div key={question.id} className={styles["item"]}>
+                <Link href={`/questions/${question.id}`}>{question.title}</Link>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    </DefaultLayout>
+  );
+}
