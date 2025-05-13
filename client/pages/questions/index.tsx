@@ -1,21 +1,22 @@
 "use client";
 
-import { useState } from "react";
-
 import styles from "./Questions.module.css";
 
 import DefaultLayout from "@/layouts/default";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 export default function IndexPage() {
-  const obj = useParams();
-  console.log(obj);
+  const searchParams = useSearchParams();
+
+  const search = searchParams.get("subject");
+
+  console.log(search);
 
   return (
     <DefaultLayout>
       <section className={styles.conteiner}>
-        <Link href={`dawd/1`}>one</Link>
+        <Link href={`/questions/1`}>one</Link>
       </section>
     </DefaultLayout>
   );
