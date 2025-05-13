@@ -1,12 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from 'next/router';
 
 import styles from "./Questions.module.css";
 
 import DefaultLayout from "@/layouts/default";
 
-export default function IndexPage() {
+export default function QuestionPage() {
+  
   const questions = [
     {
       id: 1,
@@ -68,7 +70,6 @@ export default function IndexPage() {
     }
   };
 
-  // Обработчик перезапуска квиза
   const handleRestartQuiz = () => {
     setCurrentQuestion(0);
     setSelectedAnswer("");

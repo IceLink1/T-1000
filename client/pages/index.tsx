@@ -23,11 +23,11 @@ export default function IndexPage() {
       <section className={styles.home}>
         <div className={styles["items"]}>
           {questions.map((question) => (
-            <div className={styles['conteiner']}>
-              <div key={question.id} className={styles["item"]}>
-                <Link href={`/questions/${question.id}`}>{question.title}</Link>
+            <Link href={`/questions?subject=${question.title}`} key={question.id}>
+              <div className={styles["conteiner"]}>
+                <h1>{question.title}</h1>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </section>
