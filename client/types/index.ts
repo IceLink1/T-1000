@@ -13,6 +13,7 @@ export interface Question {
     correctAnswer: string;
   }[];
   subject: string;
+  teacher: string;
 }
 
 export interface QuestionState {

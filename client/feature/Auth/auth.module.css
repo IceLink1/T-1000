@@ -1,0 +1,156 @@
+.container {
+    
+  }
+  
+  .authPopup{
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 50px 0px;
+    background: #00000079;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 36rem;
+    border-radius: 0.5rem;
+    box-shadow: 0px 0px 20px rgba(128, 128, 128, 0.662);
+    overflow: hidden;
+  }
+  
+  .cardHeader {
+    padding: 1.5rem 1.5rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .cardBody {
+    padding: 1.5rem;
+  }
+  
+  .cardFooter {
+    padding: 1.5rem;
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+  }
+  
+  .subtitle {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+  
+  .formGroup {
+    margin-bottom: 1rem;
+  }
+  
+  .label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+  
+  .input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.375rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.375rem;
+    min-height: 100px;
+    resize: vertical;
+  }
+  
+  .button {
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    background-color: #3b82f6;
+    color: white;
+  }
+  
+  .button:hover {
+    background-color: #2563eb;
+  }
+  
+  .button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  .error {
+    color: #ef4444;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+  }
+  
+  .success {
+    color: #10b981;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+  }
+  
+  .optionsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .optionItem {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  .removeButton {
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .addButton {
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    background-color: #10b981;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 1rem;
+  }
+  
+  .questionsList {
+    margin-top: 1.5rem;
+    border-top: 1px solid #e5e7eb;
+    padding-top: 1.5rem;
+  }
+  
+  .questionItem {
+    padding: 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.375rem;
+    margin-bottom: 0.5rem;
+  }

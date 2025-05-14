@@ -7,15 +7,10 @@ router.get("/", async (req, res) => {
   try {
     const { subject } = req.query;
     if (subject) {
-      const { _id, title, subject, questions } = await Question.find({
+      const questionList = await Question.find({
         subject,
       });
-      return res.json({
-        _id,
-        title,
-        subject,
-        count: questions.length + 1,
-      });
+      return res.json(questionList);
     }
     const questions = await Question.find();
     res.json(questions);
@@ -33,8 +28,9 @@ router.post("/", async (req, res) => {
   });
 
   if (!question.title || !question.questions || !question.subject) {
-    return res.status(400).json({ message: "All fields are required" });
+    return res.status(402).json({ message: "All fields are required" });
   }
+
   try {
     const newQuestion = await question.save();
     res.status(201).json(newQuestion);
@@ -60,6 +56,7 @@ router.get("/:id", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
 router.delete("/:id", async (req, res) => {
   if (!req.params.id) {
     return res.status(400).json({ message: "All fields are required" });
@@ -84,7 +81,7 @@ router.patch("/:id", async (req, res) => {
   try {
     const question = await Question.findByIdAndUpdate(
       id,
-      { title, questions, subject },
+      { title, questions, subject, teacher },
       {
         new: true,
       }

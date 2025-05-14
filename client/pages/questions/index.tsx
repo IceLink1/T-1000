@@ -20,14 +20,21 @@ export default function IndexPage() {
   const searchParams = useSearchParams();
   const dispatch = useAppDispatch();
   const { questions, loading } = useAppSelector((state) => state.questions);
+  const subject = searchParams.get("subject");
 
   useEffect(() => {
-    dispatch(fetchQuestions()).then((res) => {
-      console.log(res.payload);
-    });
-  }, [searchParams]);
-
-  const subject = searchParams.get("subject");
+    if (subject) {
+      dispatch(fetchQuestions({ subject }))
+        .then((res) => {
+          if (res.payload) {
+            // console.log("Получены вопросы:", res.payload);
+          }
+        })
+        .catch((error) => {
+          console.error("Ошибка при загрузке вопросов:", error);
+        });
+    }
+  }, [dispatch, subject]);
 
   const questionsList = [
     {
@@ -54,7 +61,7 @@ export default function IndexPage() {
               <h1>Loading...</h1>
             ) : (
               <>
-                {questionsList.map((question) => (
+                {questions.map((question) => (
                   <Link href={`/questions/${question._id}`} key={question._id}>
                     <div className={styles["card"]}>
                       <h2>{question.title}</h2>
