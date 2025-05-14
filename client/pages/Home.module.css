@@ -6,6 +6,9 @@
   justify-content: center;
   padding: 20px 0;
 }
+body{
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 
 .conteiner {
   width: 100%;

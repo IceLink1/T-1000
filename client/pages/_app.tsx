@@ -5,6 +5,7 @@ import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { useRouter } from "next/router";
 import { makeStore } from '@/lib/store/store';
 
+
 import "@/styles/globals.css";
 
 const store = makeStore();
