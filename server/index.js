@@ -1,17 +1,34 @@
-import express from 'express'
-import cors from 'cors'
+import express from "express";
+import cors from "cors";
+import mongoose from "mongoose";
+import { config } from "dotenv";
 
-const PORT = process.env.PORT || 3001
-const app = express()
+import questionRoutes from "./routes/question.router.js";
 
-app.use(cors())
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+config();
+const PORT = process.env.PORT || 5000;
+const app = express();
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use("/questions", questionRoutes);
 
-app.listen(PORT, () => {
-  console.log('Server is running on port 3000')
-})
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
+
+async function Start() {
+  try {
+    await mongoose.connect(process.env.MONGO_DB).then(() => {
+      console.log("Connected to MongoDB");
+    });
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+Start();

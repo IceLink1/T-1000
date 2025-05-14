@@ -4,7 +4,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
 }
 
 .list {
@@ -18,7 +17,7 @@
   max-width: 36rem;
   border-radius: 0.5rem;
   overflow: hidden;
-  h1{
+  h1 {
     text-align: center;
     margin: 20px;
     font-size: xx-large;
@@ -29,10 +28,21 @@
   width: 100%;
   max-width: 36rem;
   padding: 20px;
-  border-radius: 0.5rem;
-  border: 2px solid #2563eb;
-
+  border-radius: 24px;
+  border: 2px solid #2d2d2d;
   overflow: hidden;
+  h2{
+    font-size: 1.5rem;
+      font-weight: 600;
+  }
+  div {
+    display: flex;
+    justify-content: space-between;
+    span {
+      font-size: 1.1rem;
+      font-weight: 350;
+    }
+  }
 }
 
 .cardHeader {
