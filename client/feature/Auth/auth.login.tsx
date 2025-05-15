@@ -44,6 +44,7 @@ export default function Auth() {
     setIsLoggedIn(false);
     localStorage.removeItem("token");
   };
+  console.log(Class);
 
   return (
     <>
@@ -67,45 +68,58 @@ export default function Auth() {
             </div>
             <div className={styles.cardBody}>
               <form onSubmit={handleLogin}>
-                <div className={styles.formGroup}>
-                  <label className={styles.label}>Логин:</label>
-                  <input
-                    type="text"
-                    className={styles.input}
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    required
-                  />
-                </div>
-
                 {isAdminCheck ? (
-                  <div className={styles.formGroup}>
-                    <label className={styles.label}>Пароль:</label>
-                    <input
-                      type="password"
-                      className={styles.input}
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                    />
-                  </div>
+                  <>
+                    <div className={styles.formGroup}>
+                      <label className={styles.label}>Логин:</label>
+                      <input
+                        type="text"
+                        className={styles.input}
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className={styles.formGroup}>
+                      <label className={styles.label}>Пароль:</label>
+                      <input
+                        type="password"
+                        className={styles.input}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                      />
+                    </div>
+                  </>
                 ) : (
-                  <div className={styles.formGroup}>
-                    <label className={styles.label}>Класс:</label>
-                    <select
-                      name=""
-                      id=""
-                      onChange={(e) => setClass(e.target.value)}
-                    >
-                      <option value="5">5</option>
-                      <option value="6">6</option>
-                      <option value="7">7</option>
-                      <option value="8">8</option>
-                      <option value="9">9</option>
-                      <option value="10">10</option>
-                      <option value="11">11</option>
-                    </select>
-                  </div>
+                  <>
+                    <div className={styles.formGroup}>
+                      <label className={styles.label}>ФИО:</label>
+                      <input
+                        type="sting"
+                        className={styles.input}
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className={styles.formGroup}>
+                      <label className={styles.label}>Класс:</label>
+                      <select
+                        className="form-control w-full p-3  border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300"
+                        onChange={(e) => setClass(e.target.value)}
+                        value={Class}
+                      >
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                      </select>
+                    </div>
+                  </>
                 )}
                 <div className={styles.formGroup}>
                   <label className={styles.label}>
