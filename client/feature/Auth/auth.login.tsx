@@ -17,23 +17,14 @@ export default function Auth() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
+  const [Class, setClass] = useState("");
   const [isOpen, setIsOpen] = useState<boolean>(false);
-
-  const [questions, setQuestions] = useState<Question[]>([]);
-  const [newQuestion, setNewQuestion] = useState("");
-  const [options, setOptions] = useState<string[]>([""]);
-  const [correctAnswer, setCorrectAnswer] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
+  const [isAdminCheck, setIsAdminCheck] = useState<boolean>(false);
 
   useEffect(() => {
-    const isAuth = localStorage.getItem("adminAuth");
-    if (isAuth === "true") {
+    const isAuth = localStorage.getItem("token");
+    if (isAuth) {
       setIsLoggedIn(true);
-
-      const savedQuestions = localStorage.getItem("adminQuestions");
-      if (savedQuestions) {
-        setQuestions(JSON.parse(savedQuestions));
-      }
     }
   }, []);
 
@@ -51,59 +42,7 @@ export default function Auth() {
 
   const handleLogout = () => {
     setIsLoggedIn(false);
-    localStorage.removeItem("adminAuth");
-  };
-
-  const addOption = () => {
-    setOptions([...options, ""]);
-  };
-
-  const removeOption = (index: number) => {
-    const newOptions = [...options];
-    newOptions.splice(index, 1);
-    setOptions(newOptions);
-  };
-
-  const handleOptionChange = (index: number, value: string) => {
-    const newOptions = [...options];
-    newOptions[index] = value;
-    setOptions(newOptions);
-  };
-
-  const handleAddQuestion = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!newQuestion || options.some((opt) => !opt) || !correctAnswer) {
-      setSuccessMessage("Пожалуйста, заполните все поля");
-      return;
-    }
-
-    if (!options.includes(correctAnswer)) {
-      setSuccessMessage("Правильный ответ должен быть среди вариантов ответа");
-      return;
-    }
-
-    const newQuestionObj: Question = {
-      id:
-        questions.length > 0 ? Math.max(...questions.map((q) => q.id)) + 1 : 1,
-      question: newQuestion,
-      options: [...options],
-      correctAnswer: correctAnswer,
-    };
-
-    const updatedQuestions = [...questions, newQuestionObj];
-    setQuestions(updatedQuestions);
-
-    localStorage.setItem("adminQuestions", JSON.stringify(updatedQuestions));
-
-    setNewQuestion("");
-    setOptions([""]);
-    setCorrectAnswer("");
-    setSuccessMessage("Вопрос успешно добавлен");
-
-    setTimeout(() => {
-      setSuccessMessage("");
-    }, 3000);
+    localStorage.removeItem("token");
   };
 
   return (
@@ -119,26 +58,27 @@ export default function Auth() {
 
       {isOpen && (
         <div className={styles["authPopup"]} onClick={() => setIsOpen(false)}>
-          {!isLoggedIn ? (
-            <div
-              className={`bg-white ${styles.card} dark:bg-black`}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className={styles.cardHeader}>
-                <h2 className={styles.title}>Вход в панель администратора</h2>
-              </div>
-              <div className={styles.cardBody}>
-                <form onSubmit={handleLogin}>
-                  <div className={styles.formGroup}>
-                    <label className={styles.label}>Логин:</label>
-                    <input
-                      type="text"
-                      className={styles.input}
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                      required
-                    />
-                  </div>
+          <div
+            className={`bg-white ${styles.card} dark:bg-black`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className={styles.cardHeader}>
+              <h2 className={styles.title}>Вход в панель администратора</h2>
+            </div>
+            <div className={styles.cardBody}>
+              <form onSubmit={handleLogin}>
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>Логин:</label>
+                  <input
+                    type="text"
+                    className={styles.input}
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    required
+                  />
+                </div>
+
+                {isAdminCheck ? (
                   <div className={styles.formGroup}>
                     <label className={styles.label}>Пароль:</label>
                     <input
@@ -149,138 +89,44 @@ export default function Auth() {
                       required
                     />
                   </div>
-                  {loginError && <p className={styles.error}>{loginError}</p>}
-                  <div className={styles.cardFooter}>
-                    <button type="submit" className={styles.button}>
-                      Войти
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          ) : (
-            <div className={styles.card}>
-              <div className={styles.cardHeader}>
-                <h2 className={styles.title}>Панель администратора</h2>
-                <button
-                  onClick={handleLogout}
-                  className={styles.button}
-                  style={{ alignSelf: "flex-end", marginTop: "0.5rem" }}
-                >
-                  Выйти
-                </button>
-              </div>
-              <div className={styles.cardBody}>
-                <h3 className={styles.subtitle}>Добавить новый вопрос</h3>
-                <form onSubmit={handleAddQuestion}>
+                ) : (
                   <div className={styles.formGroup}>
-                    <label className={styles.label}>Вопрос:</label>
-                    <input
-                      type="text"
-                      className={styles.input}
-                      value={newQuestion}
-                      onChange={(e) => setNewQuestion(e.target.value)}
-                      required
-                    />
-                  </div>
-
-                  <div className={styles.formGroup}>
-                    <label className={styles.label}>Варианты ответов:</label>
-                    <div className={styles.optionsContainer}>
-                      {options.map((option, index) => (
-                        <div key={index} className={styles.optionItem}>
-                          <input
-                            type="text"
-                            className={styles.input}
-                            value={option}
-                            onChange={(e) =>
-                              handleOptionChange(index, e.target.value)
-                            }
-                            required
-                          />
-                          {options.length > 1 && (
-                            <button
-                              type="button"
-                              className={styles.removeButton}
-                              onClick={() => removeOption(index)}
-                            >
-                              Удалить
-                            </button>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                    <button
-                      type="button"
-                      className={styles.addButton}
-                      onClick={addOption}
-                    >
-                      Добавить вариант
-                    </button>
-                  </div>
-
-                  <div className={styles.formGroup}>
-                    <label className={styles.label}>Правильный ответ:</label>
+                    <label className={styles.label}>Класс:</label>
                     <select
-                      className={styles.input}
-                      value={correctAnswer}
-                      onChange={(e) => setCorrectAnswer(e.target.value)}
-                      required
+                      name=""
+                      id=""
+                      onChange={(e) => setClass(e.target.value)}
                     >
-                      <option value="">Выберите правильный ответ</option>
-                      {options.map(
-                        (option, index) =>
-                          option && (
-                            <option key={index} value={option}>
-                              {option}
-                            </option>
-                          )
-                      )}
+                      <option value="5">5</option>
+                      <option value="6">6</option>
+                      <option value="7">7</option>
+                      <option value="8">8</option>
+                      <option value="9">9</option>
+                      <option value="10">10</option>
+                      <option value="11">11</option>
                     </select>
                   </div>
-
-                  {successMessage && (
-                    <p
-                      className={
-                        successMessage.includes("успешно")
-                          ? styles.success
-                          : styles.error
-                      }
-                    >
-                      {successMessage}
-                    </p>
-                  )}
-
-                  <div className={styles.cardFooter}>
-                    <button type="submit" className={styles.button}>
-                      Добавить вопрос
-                    </button>
-                  </div>
-                </form>
-
-                {/* Список добавленных вопросов */}
-                {questions.length > 0 && (
-                  <div className={styles.questionsList}>
-                    <h3 className={styles.subtitle}>Добавленные вопросы</h3>
-                    {questions.map((q) => (
-                      <div key={q.id} className={styles.questionItem}>
-                        <p>
-                          <strong>Вопрос:</strong> {q.question}
-                        </p>
-                        <p>
-                          <strong>Варианты ответов:</strong>{" "}
-                          {q.options.join(", ")}
-                        </p>
-                        <p>
-                          <strong>Правильный ответ:</strong> {q.correctAnswer}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
                 )}
-              </div>
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>
+                    <input
+                      type="checkbox"
+                      className={`mr-8`}
+                      checked={isAdminCheck}
+                      onChange={(e) => setIsAdminCheck((prev) => !prev)}
+                    />
+                    <span> Я администратор</span>
+                  </label>
+                </div>
+                {loginError && <p className={styles.error}>{loginError}</p>}
+                <div className={styles.cardFooter}>
+                  <button type="submit" className={styles.button}>
+                    Войти
+                  </button>
+                </div>
+              </form>
             </div>
-          )}
+          </div>
         </div>
       )}
     </>
