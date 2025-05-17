@@ -17,7 +17,7 @@ export default function Auth() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
-  const [Class, setClass] = useState("");
+  const [Class, setClass] = useState("5");
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isAdminCheck, setIsAdminCheck] = useState<boolean>(false);
 
@@ -30,11 +30,30 @@ export default function Auth() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (username === "admin" && password === "password") {
+    if (isAdminCheck) {
+      if (username !== "admin" || password !== "root") {
+        setLoginError("Неверный логин или пароль");
+        return;
+      }
       setIsLoggedIn(true);
-      localStorage.setItem("adminAuth", "true");
+      localStorage.setItem("token", "true");
+      localStorage.setItem("username", username);
+      localStorage.setItem("isAdmin", "true");
+      setUsername("");
+      setPassword("");
       setLoginError("");
+      setIsOpen(false);
+    }
+
+    if (username && Class) {
+      setIsLoggedIn(true);
+      localStorage.setItem("token", "true");
+      localStorage.setItem("username", username);
+      localStorage.setItem("Class", Class);
+      setUsername("");
+      setClass("");
+      setLoginError("");
+      setIsOpen(false);
     } else {
       setLoginError("Неверный логин или пароль");
     }

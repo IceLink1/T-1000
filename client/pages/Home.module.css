@@ -19,13 +19,18 @@ body{
   position: relative;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   border: 2px solid #18181ab0;
+  img{
+    transition: .1s;
+  }
 }
 
 .conteiner:hover {
   /* transform: translateY(-5px); */
   box-shadow: 0px 8px 20px #6f6f6fb4;
   border: 2px solid #18181a;
-
+  img{
+    scale: 1.08;
+  }
 }
 
 .items {
