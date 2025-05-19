@@ -64,10 +64,9 @@ export default function IndexPage() {
                 {questions.map((question) => (
                   <Link href={`/questions/${question._id}`} key={question._id}>
                     <div className={styles["card"]}>
-                      <h2>{question.title}</h2>
+                      <h2>{question.question}</h2>
                       <div>
                         <span>придмет : {question.subject}</span>
-                        <span> {question.teacher}</span>
                       </div>
                     </div>
                   </Link>

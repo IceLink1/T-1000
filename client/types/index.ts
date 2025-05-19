@@ -6,14 +6,10 @@ export type IconSvgProps = SVGProps<SVGSVGElement> & {
 
 export interface Question {
   _id: string;
-  title: string;
-  questions: {
-    question: string;
-    options: string[];
-    correctAnswer: string;
-  }[];
+  question: string;
+  answers: string[];
+  correct: number;
   subject: string;
-  teacher: string;
 }
 
 export interface QuestionState {
