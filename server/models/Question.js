@@ -6,15 +6,19 @@ const QuestionSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    questions: {
-      type: Array,
-      required: true,
-    },
-    subject: {
+    question: {
       type: String,
       required: true,
     },
-    teacher: {
+    answers: {
+      type: Array,
+      required: true,
+    },
+    correct: {
+      type: Number,
+      required: true,
+    },
+    subject: {
       type: String,
       required: true,
     },

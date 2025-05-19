@@ -1,33 +1,47 @@
 import express from "express";
 import Question from "../models/Question.js";
+import { checkRole } from "../utils/checkRole.js";
 
 const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
-    const { subject } = req.query;
+    const { subject, limit = 10, cursor = 1 } = req.query;
+
     if (subject) {
       const questionList = await Question.find({
         subject,
-      });
-      return res.json(questionList);
+      })
+        .limit(limit)
+        .skip(cursor - 1)
+        .sort({ createdAt: Math.random() < 0.5 ? -1 : 1 });
+      // .aggregate([{ $sample: { size: parseInt(limit) } }])
+      return res.json({ questionList, cursor: cursor + 1 });
+    } else {
+      const questionList = await Question.find().limit(limit);
+      return res.json({ questionList });
     }
-    const questions = await Question.find();
-    res.json(questions);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", checkRole, async (req, res) => {
   const question = new Question({
     title: req.body.title,
-    questions: req.body.questions,
+    question: req.body.question,
+    answers: req.body.answers,
+    correct: req.body.correct,
     subject: req.body.subject,
-    teacher: req.body.teacher,
   });
 
-  if (!question.title || !question.questions || !question.subject) {
+  if (
+    !question.title ||
+    !question.question ||
+    !question.subject ||
+    !question.correct ||
+    !question.answers
+  ) {
     return res.status(402).json({ message: "All fields are required" });
   }
 
@@ -36,15 +50,6 @@ router.post("/", async (req, res) => {
     res.status(201).json(newQuestion);
   } catch (error) {
     res.status(501).json({ message: error.message });
-  }
-});
-
-router.get("/", async (req, res) => {
-  try {
-    const questions = await Question.find();
-    res.json(questions);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
   }
 });
 
@@ -72,21 +77,21 @@ router.delete("/:id", async (req, res) => {
 
 router.patch("/:id", async (req, res) => {
   const id = req.params.id;
-  const { title, questions, subject } = req.body;
+  const { title, question, subject, correct, answers } = req.body;
 
   if (!id) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
   try {
-    const question = await Question.findByIdAndUpdate(
+    const newQuestion = await Question.findByIdAndUpdate(
       id,
-      { title, questions, subject, teacher },
+      { title, question, subject, correct, answers },
       {
         new: true,
       }
     );
-    res.json(question);
+    res.json(newQuestion);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

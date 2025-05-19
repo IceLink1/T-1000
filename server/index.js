@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import { config } from "dotenv";
 
 import questionRoutes from "./routes/question.router.js";
+import authRoutes from "./routes/auth.router.js";
 
 config();
 const PORT = process.env.PORT || 5000;
@@ -13,6 +14,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/questions", questionRoutes);
+app.use("/auth", authRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
