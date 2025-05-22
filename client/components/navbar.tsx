@@ -10,13 +10,13 @@ import {
 import { Button } from "@heroui/button";
 import { Link } from "@heroui/link";
 import { link as linkStyles } from "@heroui/theme";
+import Auth from "@/feature/Auth";
 import NextLink from "next/link";
 import clsx from "clsx";
 
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
 import { GithubIcon, HeartFilledIcon } from "@/components/icons";
-import Auth from "@/feature/Auth/auth.login";
 
 export const Navbar = () => {
   return (
@@ -49,7 +49,7 @@ export const Navbar = () => {
         className="hidden sm:flex basis-1/5 sm:basis-full"
         justify="end"
       >
-        <NavbarItem className="hidden sm:flex gap-2">
+        <NavbarItem className="hidden md:flex gap-2">
           <ThemeSwitch />
         </NavbarItem>
         <NavbarItem className="hidden md:flex">

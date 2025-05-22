@@ -1,4 +1,4 @@
-3import React from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/lib/store/store';
 import { logout } from '@/lib/store/features/authSlice';
@@ -6,6 +6,8 @@ import { Button } from '@heroui/button';
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
 import { useState } from 'react';
+import clsx from 'clsx';
+import styles from "./auth.module.css"
 
 const Auth: React.FC = () => {
   const dispatch = useDispatch();
@@ -51,7 +53,7 @@ const Auth: React.FC = () => {
   }
 
   return (
-    <div className="flex items-center gap-2">
+    <div className={clsx("flex items-center gap-2")} >
       <Button
         size="sm"
         variant="flat"

@@ -50,6 +50,19 @@ export const loginAdmin = createAsyncThunk(
   }
 );
 
+export const loginUser = createAsyncThunk(
+  'auth/loginUser',
+  async (userData: { name: string; class: string }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`${API_URL}/login`, userData);
+      localStorage.setItem('token', response.data.token);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
 export const getUserData = createAsyncThunk(
   'auth/getUserData',
   async (id: string, { rejectWithValue }) => {
@@ -112,6 +125,20 @@ const authSlice = createSlice({
         state.token = action.payload.token;
       })
       .addCase(loginAdmin.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+      // Login user
+      .addCase(loginUser.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(loginUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.user = action.payload.userdata;
+        state.token = action.payload.token;
+      })
+      .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       })

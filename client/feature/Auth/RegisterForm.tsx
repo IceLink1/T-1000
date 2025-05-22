@@ -1,52 +1,65 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { registerUser } from '@/lib/store/features/authSlice';
-import { Button } from '@heroui/button';
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { registerUser } from "@/lib/store/features/authSlice";
+import { Button } from "@heroui/button";
+import styles from "./auth.module.css";
+import clsx from "clsx";
 
 interface RegisterFormProps {
   onClose: () => void;
   onSwitchToLogin: () => void;
 }
 
-const RegisterForm: React.FC<RegisterFormProps> = ({ onClose, onSwitchToLogin }) => {
+const RegisterForm: React.FC<RegisterFormProps> = ({
+  onClose,
+  onSwitchToLogin,
+}) => {
   const dispatch = useDispatch();
-  const [name, setName] = useState('');
-  const [classGroup, setClassGroup] = useState('5');
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [name, setName] = useState("");
+  const [classGroup, setClassGroup] = useState("5");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
-    setSuccess('');
+    setError("");
+    setSuccess("");
 
     try {
       if (!name || !classGroup) {
-        setError('Пожалуйста, заполните все поля');
+        setError("Пожалуйста, заполните все поля");
         return;
       }
-      
+
       // @ts-ignore
-      const result = await dispatch(registerUser({ name, class: classGroup })).unwrap();
+      const result = await dispatch(
+        registerUser({ name, class: classGroup })
+      ).unwrap();
       if (result) {
-        setSuccess('Регистрация успешна!');
+        setSuccess("Регистрация успешна!");
         setTimeout(() => {
           onClose();
         }, 1500);
       }
     } catch (err: any) {
-      setError(err.message || 'Произошла ошибка при регистрации');
+      setError(err.message || "Произошла ошибка при регистрации");
     }
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={onClose}>
-      <div 
+    <div
+      className={clsx(
+        "fixed inset-0 bg-black/50 flex items-center justify-center z-50",
+        styles["authPopup"]
+      )}
+      onClick={onClose}
+    >
+      <div
         className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-md w-full"
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-xl font-bold mb-4">Регистрация нового ученика</h2>
-        
+
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1">ФИО:</label>
@@ -58,7 +71,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onClose, onSwitchToLogin })
               required
             />
           </div>
-          
+
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1">Класс:</label>
             <select
@@ -76,10 +89,10 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onClose, onSwitchToLogin })
               <option value="11">11</option>
             </select>
           </div>
-          
+
           {error && <p className="text-red-500 mb-4">{error}</p>}
           {success && <p className="text-green-500 mb-4">{success}</p>}
-          
+
           <div className="flex justify-between items-center">
             <Button
               type="submit"
@@ -87,7 +100,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onClose, onSwitchToLogin })
             >
               Зарегистрироваться
             </Button>
-            
+
             <button
               type="button"
               className="text-sm text-blue-500 hover:underline"
@@ -97,7 +110,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onClose, onSwitchToLogin })
             </button>
           </div>
         </form>
-        
+
         <button
           className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
           onClick={onClose}
