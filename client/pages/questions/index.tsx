@@ -61,16 +61,25 @@ export default function IndexPage() {
               <h1>Loading...</h1>
             ) : (
               <>
-                {questions.map((question) => (
-                  <Link href={`/questions/${question._id}`} key={question._id}>
-                    <div className={styles["card"]}>
-                      <h2>{question.question}</h2>
-                      <div>
-                        <span>придмет : {question.subject}</span>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
+                {questions ? (
+                  <>
+                    {questions.map((question) => (
+                      <Link
+                        href={`/questions/${question._id}`}
+                        key={question._id}
+                      >
+                        <div className={styles["card"]}>
+                          <h2>{question.question}</h2>
+                          <div>
+                            <span>придмет : {question.subject}</span>
+                          </div>
+                        </div>
+                      </Link>
+                    ))}
+                  </>
+                ) : (
+                  <h1>Ошибка</h1>
+                )}
               </>
             )}
           </div>
