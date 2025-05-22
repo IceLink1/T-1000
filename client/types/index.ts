@@ -8,12 +8,13 @@ export interface Question {
   _id: string;
   question: string;
   answers: string[];
-  correct: number;
+  correct: number | string;
   subject: string;
 }
 
 export interface QuestionState {
   questions: Question[];
   loading: boolean;
+  cursor: number;
   error: string | null;
 }

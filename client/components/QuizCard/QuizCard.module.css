@@ -1,10 +1,6 @@
-.conteiner {
-  height: 90vh;
+.container {
+  min-height: 90vh;
   width: 100vw;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
 }
 
 .card {
@@ -110,4 +106,10 @@
 
 .textCenter {
   text-align: center;
+}
+
+@media (max-width: 768px) {
+  .card {
+    box-shadow: none;
+  }
 }

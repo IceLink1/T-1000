@@ -6,11 +6,17 @@ const API_URL = "http://localhost:5000";
 
 export const fetchQuestions = createAsyncThunk(
   "questions/fetchQuestions",
-  async ({ subject }: { subject: string | null }) => {
+  async ({
+    subject,
+    currentClass,
+  }: {
+    subject: string | null;
+    currentClass: string | null;
+  }) => {
     console.log(subject);
 
     const response = await axios.get(
-      `${API_URL}/questions${subject ? `?subject=${subject}` : ""}`
+      `${API_URL}/questions${subject ? `?subject=${subject}&class=${currentClass}` : ""}`
     );
     return response.data;
   }
@@ -26,6 +32,7 @@ export const addQuestion = createAsyncThunk(
 
 const initialState: QuestionState = {
   questions: [],
+  cursor: 1,
   loading: false,
   error: null,
 };
@@ -42,7 +49,8 @@ const questionSlice = createSlice({
       })
       .addCase(fetchQuestions.fulfilled, (state, action) => {
         state.loading = false;
-        state.questions = action.payload;
+        state.questions = action.payload.questionList;
+        state.cursor = action.payload.cursor;
       })
       .addCase(fetchQuestions.rejected, (state, action) => {
         state.loading = false;
