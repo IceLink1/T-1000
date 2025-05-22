@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { registerUser } from "@/lib/store/features/authSlice";
+import { AppDispatch } from "@/lib/store/store";
+import { registerAdmin, registerUser } from "@/lib/store/features/authSlice";
 import { Button } from "@heroui/button";
 import styles from "./auth.module.css";
 import clsx from "clsx";
@@ -14,11 +15,13 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
   onClose,
   onSwitchToLogin,
 }) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const [name, setName] = useState("");
   const [classGroup, setClassGroup] = useState("5");
   const [error, setError] = useState("");
+  const [password, setPassword] = useState("");
   const [success, setSuccess] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,12 +29,28 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
     setSuccess("");
 
     try {
+      if (isAdmin) {
+        if (!password) {
+          setError("Пожалуйста, введите пароль");
+          return;
+        }
+        const result = await dispatch(
+          registerAdmin({ name, password })
+        ).unwrap();
+        if (result) {
+          setSuccess("Регистрация успешна!");
+          setTimeout(() => {
+            onClose();
+          }, 1500);
+        }
+      }
+
+
       if (!name || !classGroup) {
         setError("Пожалуйста, заполните все поля");
         return;
       }
 
-      // @ts-ignore
       const result = await dispatch(
         registerUser({ name, class: classGroup })
       ).unwrap();
@@ -72,22 +91,47 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
             />
           </div>
 
+          {isAdmin ? (
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-1">Пароль:</label>
+              <input
+                type="password"
+                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+          ) : (
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-1">Класс:</label>
+              <select
+                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300"
+                value={classGroup}
+                onChange={(e) => setClassGroup(e.target.value)}
+                required
+              >
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+              </select>
+            </div>
+          )}
+
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">Класс:</label>
-            <select
-              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300"
-              value={classGroup}
-              onChange={(e) => setClassGroup(e.target.value)}
-              required
-            >
-              <option value="5">5</option>
-              <option value="6">6</option>
-              <option value="7">7</option>
-              <option value="8">8</option>
-              <option value="9">9</option>
-              <option value="10">10</option>
-              <option value="11">11</option>
-            </select>
+            <label className="flex items-center">
+              <input
+                type="checkbox"
+                className="mr-2"
+                checked={isAdmin}
+                onChange={() => setIsAdmin(!isAdmin)}
+              />
+              <span className="text-sm">Я администратор</span>
+            </label>
           </div>
 
           {error && <p className="text-red-500 mb-4">{error}</p>}

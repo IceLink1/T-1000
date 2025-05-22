@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/lib/store/store";
 import { loginAdmin, loginUser } from "@/lib/store/features/authSlice";
 import { Button } from "@heroui/button";
 import styles from "./auth.module.css";
@@ -14,7 +15,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
   onClose,
   onSwitchToRegister,
 }) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [classGroup, setClassGroup] = useState("5");

@@ -49,6 +49,18 @@ export const loginAdmin = createAsyncThunk(
     }
   }
 );
+export const registerAdmin = createAsyncThunk(
+  'auth/loginAdmin',
+  async (userData: { name: string; password: string }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`${API_URL}/admin`, userData);
+      localStorage.setItem('token', response.data.token);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
 
 export const loginUser = createAsyncThunk(
   'auth/loginUser',

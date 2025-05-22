@@ -5,6 +5,7 @@ import { config } from "dotenv";
 
 import questionRoutes from "./routes/question.router.js";
 import authRoutes from "./routes/auth.router.js";
+import adminRoutes from "./routes/adminRoutes.js";
 
 config();
 const PORT = process.env.PORT || 5000;
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/questions", questionRoutes);
 app.use("/auth", authRoutes);
+app.use("/admin", adminRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
