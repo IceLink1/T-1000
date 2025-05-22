@@ -65,17 +65,18 @@ export const loginUser = createAsyncThunk(
 
 export const getUserData = createAsyncThunk(
   'auth/getUserData',
-  async (id: string, { rejectWithValue }) => {
+  async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`${API_URL}/my/${id}`, {
+      const response = await axios.get(`${API_URL}/check`, {
         headers: {
           Authorization: token,
         },
       });
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.response.data.message);
+      return console.log(error.response.data.message);
+      ;
     }
   }
 );

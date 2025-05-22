@@ -12,6 +12,7 @@ const store = makeStore();
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
+
   return (
     <Provider store={store}>
       <HeroUIProvider navigate={router.push}>

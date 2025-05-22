@@ -1,5 +1,5 @@
 import express from "express";
-import { register, loginAdmin, loginUser, getUserById, getAllUsers } from "../controllers/auth.controller.js";
+import { register, loginAdmin, loginUser, getUserById, getAllUsers,getUserDate } from "../controllers/auth.controller.js";
 import { checkAuth } from "../utils/checkAuth.js";
 import { checkRole } from "../utils/checkRole.js";
 import User from "../models/User.js";
@@ -7,6 +7,8 @@ import User from "../models/User.js";
 const router = express.Router();
 
 router.get("/my/:id", checkAuth, getUserById);
+
+router.get("/check", checkAuth, getUserDate);
 
 router.get("/users", checkAuth, checkRole, getAllUsers);
 
