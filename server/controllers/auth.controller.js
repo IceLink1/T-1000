@@ -95,6 +95,41 @@ export const loginAdmin = async (req, res) => {
   }
 };
 
+// Авторизация обычного пользователя
+export const loginUser = async (req, res) => {
+  try {
+    const { name, class: classGroup } = req.body;
+
+    if (!name || !classGroup) {
+      return res.status(400).json({ message: 'Все поля обязательны для заполнения' });
+    }
+
+    // Проверка существования пользователя
+    const user = await User.findOne({ name, class: classGroup });
+    if (!user) {
+      return res.status(404).json({ message: 'Пользователь не найден' });
+    }
+
+    // Создание JWT токена
+    const token = jwt.sign(
+      {
+        id: user._id,
+        role: user.role,
+      },
+      process.env.JWT,
+      { expiresIn: '30d' }
+    );
+
+    res.json({
+      userdata: user,
+      token,
+    });
+  } catch (error) {
+    console.error('Ошибка при входе пользователя:', error);
+    res.status(500).json({ message: 'Ошибка сервера при входе' });
+  }
+};
+
 // Получение данных пользователя по ID
 export const getUserById = async (req, res) => {
   try {

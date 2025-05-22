@@ -1,7 +1,8 @@
 import express from "express";
-import { register, loginAdmin, getUserById, getAllUsers } from "../controllers/auth.controller.js";
+import { register, loginAdmin, loginUser, getUserById, getAllUsers } from "../controllers/auth.controller.js";
 import { checkAuth } from "../utils/checkAuth.js";
 import { checkRole } from "../utils/checkRole.js";
+import User from "../models/User.js";
 
 const router = express.Router();
 
@@ -13,7 +14,7 @@ router.post("/reg", register);
 
 router.post("/admin", loginAdmin);
 
-// I29dmw01xv
+router.post("/login", loginUser);
 
 router.delete("/:id", async (req, res) => {
   if (!req.params.id) {
