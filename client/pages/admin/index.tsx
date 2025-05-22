@@ -12,10 +12,9 @@ interface Question {
 }
 
 export default function AdminPage() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [loginError, setLoginError] = useState("");
+  const { user, token } = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch();
+  const [newQuestion, setNewQuestion] = useState("");
 
   const [questions, setQuestions] = useState<Question[]>([]);
   const [newQuestion, setNewQuestion] = useState("");
@@ -24,32 +23,15 @@ export default function AdminPage() {
   const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
-    const isAuth = localStorage.getItem("adminAuth");
-    if (isAuth === "true") {
-      setIsLoggedIn(true);
-
-      const savedQuestions = localStorage.getItem("adminQuestions");
-      if (savedQuestions) {
-        setQuestions(JSON.parse(savedQuestions));
-      }
+    // Загрузка вопросов из localStorage при монтировании компонента
+    const savedQuestions = localStorage.getItem("adminQuestions");
+    if (savedQuestions) {
+      setQuestions(JSON.parse(savedQuestions));
     }
   }, []);
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (username === "admin" && password === "password") {
-      setIsLoggedIn(true);
-      localStorage.setItem("adminAuth", "true");
-      setLoginError("");
-    } else {
-      setLoginError("Неверный логин или пароль");
-    }
-  };
-
   const handleLogout = () => {
-    setIsLoggedIn(false);
-    localStorage.removeItem("adminAuth");
+    dispatch(logout());
   };
 
   const addOption = () => {

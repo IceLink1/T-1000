@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import questionReducer from './features/questionSlice';
+import authReducer from './features/authSlice';
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
       questions: questionReducer,
+      auth: authReducer,
     },
   });
 };

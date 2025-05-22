@@ -5,7 +5,6 @@ import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { useRouter } from "next/router";
 import { makeStore } from '@/lib/store/store';
 
-
 import "@/styles/globals.css";
 
 const store = makeStore();
@@ -17,7 +16,9 @@ export default function App({ Component, pageProps }: AppProps) {
     <Provider store={store}>
       <HeroUIProvider navigate={router.push}>
         <NextThemesProvider>
-          <Component {...pageProps} />
+          <div className="main">
+            <Component {...pageProps} />
+          </div>
         </NextThemesProvider>
       </HeroUIProvider>
     </Provider>
