@@ -23,7 +23,7 @@ router.delete("/:id", async (req, res) => {
     return res.status(400).json({ message: "All fields are required" });
   }
 
-  try {
+  try {ц
     const user = await User.findByIdAndDelete(req.params.id);
     res.json(user);
   } catch (error) {
