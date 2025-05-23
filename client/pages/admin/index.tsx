@@ -5,7 +5,6 @@ import DefaultLayout from "@/layouts/default";
 import styles from "./Admin.module.css";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/lib/store/store";
-import { logout } from "@/lib/store/features/authSlice";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { useRouter } from "next/router";
 
@@ -20,10 +19,10 @@ export default function AdminPage() {
   const { user, token } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
   const router = useRouter();
-  
+
   const [questions, setQuestions] = useState<Question[]>([]);
   const [newQuestion, setNewQuestion] = useState("");
-  const [options, setOptions] = useState<string[]>([""]);  
+  const [options, setOptions] = useState<string[]>([""]);
   const [correctAnswer, setCorrectAnswer] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
@@ -34,11 +33,6 @@ export default function AdminPage() {
       setQuestions(JSON.parse(savedQuestions));
     }
   }, []);
-
-  const handleLogout = () => {
-    dispatch(logout());
-    router.push('/');
-  };
 
   const addOption = () => {
     setOptions([...options, ""]);
@@ -97,13 +91,6 @@ export default function AdminPage() {
           <div className={styles.card}>
             <div className={styles.cardHeader}>
               <h2 className={styles.title}>Панель администратора</h2>
-              <button
-                onClick={handleLogout}
-                className={styles.button}
-                style={{ alignSelf: "flex-end", marginTop: "0.5rem" }}
-              >
-                Выйти
-              </button>
             </div>
             <div className={styles.cardBody}>
               <h3 className={styles.subtitle}>Добавить новый вопрос</h3>

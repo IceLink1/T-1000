@@ -8,19 +8,35 @@ export const siteConfig = {
       label: "Home",
       href: "/",
     },
+  ],
+  navItemsAdmin: [
+    {
+      label: "Home",
+      href: "/",
+    },
     {
       label: "Admin",
       href: "/admin",
     },
-    // {
-    //   label: "Questions",
-    //   href: "/questions",
-    // },
   ],
   navMenuItems: [
     {
       label: "Home",
       href: "/",
+    },
+    {
+      label: "Help & Feedback",
+      href: "/help-feedback",
+    },
+  ],
+  navMenuItemsAdmin: [
+    {
+      label: "Home",
+      href: "/",
+    },
+    {
+      label: "Admin",
+      href: "/admin",
     },
     {
       label: "Help & Feedback",
