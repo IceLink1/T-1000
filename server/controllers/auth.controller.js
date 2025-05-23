@@ -1,6 +1,7 @@
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import Admin from "../models/Admin.js";
 
 // Регистрация нового пользователя (ученика)
 export const register = async (req, res) => {
@@ -163,14 +164,18 @@ export const getUserDate = async (req, res) => {
     // }
     // const decoded = jwt.verify(token, process.env.JWT);
 
-    const user = await User.findById(req.user.id);
+    let user;
+    if (req.user.role === "ADMIN") {
+      user = await Admin.findById(req.user.id);
+    } else {
+      user = await User.findById(req.user.id);
+    }
 
     if (!user) {
       return res.status(404).json({ message: "Пользователь не найден" });
     }
 
     res.json(user);
-    
   } catch (error) {
     console.error("Ошибка при получении данных пользователя:", error);
     res
