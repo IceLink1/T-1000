@@ -34,17 +34,15 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
           setError("Пожалуйста, введите пароль");
           return;
         }
-        const result = await dispatch(
-          registerAdmin({ name, password })
-        ).unwrap();
+        const result = await dispatch(registerAdmin({ name, password }));
         if (result) {
           setSuccess("Регистрация успешна!");
           setTimeout(() => {
             onClose();
           }, 1500);
         }
+        return;
       }
-
 
       if (!name || !classGroup) {
         setError("Пожалуйста, заполните все поля");

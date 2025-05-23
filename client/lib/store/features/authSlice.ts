@@ -1,5 +1,5 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import axios from "axios";
 
 interface User {
   _id: string;
@@ -17,19 +17,19 @@ interface AuthState {
 
 const initialState: AuthState = {
   user: null,
-  token: typeof window !== 'undefined' ? localStorage.getItem('token') : null,
+  token: typeof window !== "undefined" ? localStorage.getItem("token") : null,
   isLoading: false,
   error: null,
 };
 
-const API_URL = 'http://localhost:5000/auth';
+const API_URL = "http://localhost:5000";
 
 export const registerUser = createAsyncThunk(
-  'auth/register',
+  "auth/register",
   async (userData: { name: string; class: string }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${API_URL}/reg`, userData);
-      localStorage.setItem('token', response.data.token);
+      const response = await axios.post(`${API_URL}/auth/reg`, userData);
+      localStorage.setItem("token", response.data.token);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data.message);
@@ -38,11 +38,11 @@ export const registerUser = createAsyncThunk(
 );
 
 export const loginAdmin = createAsyncThunk(
-  'auth/loginAdmin',
+  "admin/login",
   async (userData: { name: string; password: string }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${API_URL}/admin`, userData);
-      localStorage.setItem('token', response.data.token);
+      const response = await axios.post(`${API_URL}/admin/login`, userData);
+      localStorage.setItem("token", response.data.token);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data.message);
@@ -50,11 +50,11 @@ export const loginAdmin = createAsyncThunk(
   }
 );
 export const registerAdmin = createAsyncThunk(
-  'auth/loginAdmin',
+  "admin/register",
   async (userData: { name: string; password: string }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${API_URL}/admin`, userData);
-      localStorage.setItem('token', response.data.token);
+      const response = await axios.post(`${API_URL}/admin/register`, userData);
+      localStorage.setItem("token", response.data.token);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data.message);
@@ -63,11 +63,11 @@ export const registerAdmin = createAsyncThunk(
 );
 
 export const loginUser = createAsyncThunk(
-  'auth/loginUser',
+  "auth/loginUser",
   async (userData: { name: string; class: string }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${API_URL}/login`, userData);
-      localStorage.setItem('token', response.data.token);
+      const response = await axios.post(`${API_URL}/auth/login`, userData);
+      localStorage.setItem("token", response.data.token);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data.message);
@@ -75,35 +75,34 @@ export const loginUser = createAsyncThunk(
   }
 );
 
-export const getUserData = createAsyncThunk(
-  'auth/getUserData',
-  async () => {
-    try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`${API_URL}/check`, {
-        headers: {
-          Authorization: token,
-        },
-      });
-      return response.data;
-    } catch (error: any) {
-      return console.log(error.response.data.message);
-      ;
-    }
+export const getUserData = createAsyncThunk("auth/getUserData", async () => {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await axios.get(`${API_URL}/auth/check`, {
+      headers: {
+        Authorization: token,
+      },
+    });
+    return response.data;
+  } catch (error: any) {
+    return console.log(error.response.data.message);
   }
-);
+});
 
 const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
     logout: (state) => {
-      localStorage.removeItem('token');
+      localStorage.removeItem("token");
       state.user = null;
       state.token = null;
       state.error = null;
     },
-    setCredentials: (state, action: PayloadAction<{ user: User; token: string }>) => {
+    setCredentials: (
+      state,
+      action: PayloadAction<{ user: User; token: string }>
+    ) => {
       state.user = action.payload.user;
       state.token = action.payload.token;
     },
@@ -138,6 +137,20 @@ const authSlice = createSlice({
         state.token = action.payload.token;
       })
       .addCase(loginAdmin.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+      // register admin
+      .addCase(registerAdmin.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(registerAdmin.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.user = action.payload.userdata;
+        state.token = action.payload.token;
+      })
+      .addCase(registerAdmin.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       })
