@@ -6,10 +6,7 @@
   justify-content: center;
   padding: 20px 0;
 }
-body {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  overflow-x: hidden;
-}
+
 
 .popup {
   position: fixed;
