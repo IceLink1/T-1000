@@ -18,7 +18,7 @@ export const fetchQuestions = createAsyncThunk(
     console.log(subject);
 
     const response = await axios.get(
-      `${API_URL}/questions${subject ? `?subject=${subject}&class=${currentClass}&limit=${limit}` : ""}`
+      `${API_URL}/questions${subject ? `?subject=${subject}&currentClass=${currentClass}&limit=${limit}` : ""}`
     );
     return response.data;
   }
