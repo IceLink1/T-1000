@@ -1,0 +1,29 @@
+backend:
+    functions:
+        - entry: index.js
+          handler: handler
+          name: express
+          path: .
+          type: httpServer
+    language:
+        name: js
+    path: server
+    scripts:
+        deploy:
+            - npm install
+        local:
+            - npm install
+frontend:
+    environment:
+        NEXT_PUBLIC_API_URL: ${{ backend.functions.express.url }}
+    path: client
+    publish: dist
+    scripts:
+        build:
+            - npm run build
+        deploy:
+            - npm install
+    subdomain: T-1000
+name: T-1000
+region: us-east-1
+yamlVersion: 2
