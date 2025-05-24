@@ -25,7 +25,12 @@ export const fetchQuestions = createAsyncThunk(
 export const addQuestion = createAsyncThunk(
   "questions/addQuestion",
   async (questionData: any) => {
-    const response = await axios.post(`${API_URL}/questions`, questionData);
+    const response = await axios.post(`${API_URL}/questions`, questionData, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: localStorage.getItem("token"),
+      },
+    });
     return response.data;
   }
 );
@@ -56,8 +61,17 @@ const questionSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || "Произошла ошибка";
       })
-      .addCase(addQuestion.fulfilled, (state, action) => {
-        state.questions.push(action.payload);
+      .addCase(addQuestion.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(addQuestion.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || "Произошла ошибка";
+      })
+      .addCase(addQuestion.fulfilled, (state) => {
+        state.loading = false;
+        state.error = null;
       });
   },
 });

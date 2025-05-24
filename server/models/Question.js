@@ -15,10 +15,14 @@ const QuestionSchema = new mongoose.Schema(
       required: true,
     },
     correct: {
-      type: Number,
+      type: String,
       required: true,
     },
     subject: {
+      type: String,
+      required: true,
+    },
+    currentClass: {
       type: String,
       required: true,
     },

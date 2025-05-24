@@ -3,10 +3,10 @@
 import { useState, useEffect } from "react";
 import DefaultLayout from "@/layouts/default";
 import styles from "./Admin.module.css";
-import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/lib/store/store";
 import ProtectedRoute from "@/components/ProtectedRoute";
-import { useRouter } from "next/router";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks/useStore";
+import { addQuestion } from "@/lib/store/features/questionSlice";
 
 interface Question {
   id: number;
@@ -16,23 +16,29 @@ interface Question {
 }
 
 export default function AdminPage() {
-  const { user, token } = useSelector((state: RootState) => state.auth);
-  const dispatch = useDispatch();
-  const router = useRouter();
+  const { user, token } = useAppSelector((state: RootState) => state.auth);
+  const { loading } = useAppSelector((state: RootState) => state.questions);
+  const dispatch = useAppDispatch();
 
   const [questions, setQuestions] = useState<Question[]>([]);
   const [newQuestion, setNewQuestion] = useState("");
   const [options, setOptions] = useState<string[]>([""]);
   const [correctAnswer, setCorrectAnswer] = useState("");
+  const [currentClass, setCurrentClass] = useState("");
+  const [currentSubject, setCurrentSubject] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
-  useEffect(() => {
-    // Загрузка вопросов из localStorage
-    const savedQuestions = localStorage.getItem("adminQuestions");
-    if (savedQuestions) {
-      setQuestions(JSON.parse(savedQuestions));
-    }
-  }, []);
+  const Classes = [
+    "Математика",
+    "Физика",
+    "Химия",
+    "Биология",
+    "География",
+    "История",
+    "Литература",
+    "Английский язык",
+    "Информатика",
+  ];
 
   const addOption = () => {
     setOptions([...options, ""]);
@@ -52,36 +58,28 @@ export default function AdminPage() {
 
   const handleAddQuestion = (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!newQuestion || options.some((opt) => !opt) || !correctAnswer) {
-      setSuccessMessage("Пожалуйста, заполните все поля");
-      return;
-    }
-
-    if (!options.includes(correctAnswer)) {
-      setSuccessMessage("Правильный ответ должен быть среди вариантов ответа");
-      return;
-    }
-
-    const newQuestionObj: Question = {
-      id:
-        questions.length > 0 ? Math.max(...questions.map((q) => q.id)) + 1 : 1,
+    const newQuestionData = {
+      title: newQuestion,
       question: newQuestion,
-      options: [...options],
-      correctAnswer: correctAnswer,
+      answers: options.filter((option) => option.trim() !== ""),
+      correct: correctAnswer,
+      subject: currentSubject,
+      currentClass,
     };
-
-    const updatedQuestions = [...questions, newQuestionObj];
-    setQuestions(updatedQuestions);
-
-    setNewQuestion("");
-    setOptions([""]);
-    setCorrectAnswer("");
-    setSuccessMessage("Вопрос успешно добавлен");
-
-    setTimeout(() => {
-      setSuccessMessage("");
-    }, 3000);
+    dispatch(addQuestion(newQuestionData))
+      .then((response) => {
+        if (response.meta.requestStatus === "fulfilled") {
+          setSuccessMessage("Вопрос успешно добавлен!");
+          setNewQuestion("");
+          setOptions([""]);
+          setCorrectAnswer("");
+          setCurrentClass("");
+          setCurrentSubject("");
+        }
+      })
+      .catch((error) => {
+        setSuccessMessage("Ошибка при добавлении вопроса.");
+      });
   };
 
   return (
@@ -161,6 +159,44 @@ export default function AdminPage() {
                   </select>
                 </div>
 
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>Выберите Класс:</label>
+                  <select
+                    className={styles.input}
+                    value={currentClass}
+                    onChange={(e) => setCurrentClass(e.target.value)}
+                    required
+                  >
+                    {[5, 6, 7, 8, 9, 10, 11].map(
+                      (option, index) =>
+                        option && (
+                          <option key={index} value={option}>
+                            {option}
+                          </option>
+                        )
+                    )}
+                  </select>
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>Выберите Предмет:</label>
+                  <select
+                    className={styles.input}
+                    value={currentSubject}
+                    onChange={(e) => setCurrentSubject(e.target.value)}
+                    required
+                  >
+                    {Classes.map(
+                      (option, index) =>
+                        option && (
+                          <option key={index} value={option}>
+                            {option}
+                          </option>
+                        )
+                    )}
+                  </select>
+                </div>
+
                 {successMessage && (
                   <p
                     className={
@@ -174,17 +210,20 @@ export default function AdminPage() {
                 )}
 
                 <div className={styles.cardFooter}>
-                  <button type="submit" className={styles.button}>
-                    Добавить вопрос
-                  </button>
+                  {loading ? (
+                    <h1>Loading..</h1>
+                  ) : (
+                    <button type="submit" className={styles.button}>
+                      Добавить вопрос
+                    </button>
+                  )}
                 </div>
               </form>
 
-              {/* Список добавленных вопросов */}
               {questions.length > 0 && (
                 <div className={styles.questionsList}>
                   <h3 className={styles.subtitle}>Добавленные вопросы</h3>
-                  {questions.map((q) => (
+                  {/* {questions.map((q) => (
                     <div key={q.id} className={styles.questionItem}>
                       <p>
                         <strong>Вопрос:</strong> {q.question}
@@ -197,7 +236,7 @@ export default function AdminPage() {
                         <strong>Правильный ответ:</strong> {q.correctAnswer}
                       </p>
                     </div>
-                  ))}
+                  ))} */}
                 </div>
               )}
             </div>

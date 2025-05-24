@@ -16,7 +16,7 @@ export default function DefaultLayout({
 
   useEffect(() => {
     dispatch(getUserData());
-  });
+  }, []);
 
   return (
     <div className="relative flex flex-col h-screen">

@@ -33,6 +33,7 @@ router.post("/", checkRole, async (req, res) => {
     answers: req.body.answers,
     correct: req.body.correct,
     subject: req.body.subject,
+    currentClass: req.body.currentClass,
   });
 
   if (
@@ -40,7 +41,8 @@ router.post("/", checkRole, async (req, res) => {
     !question.question ||
     !question.subject ||
     !question.correct ||
-    !question.answers
+    !question.answers ||
+    !question.currentClass
   ) {
     return res.status(402).json({ message: "All fields are required" });
   }
