@@ -16,11 +16,9 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
       <HeroUIProvider navigate={router.push}>
-        <NextThemesProvider>
           <div className="main">
             <Component {...pageProps} />
           </div>
-        </NextThemesProvider>
       </HeroUIProvider>
     </Provider>
   );

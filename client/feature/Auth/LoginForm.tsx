@@ -135,7 +135,6 @@ const LoginForm: React.FC<LoginFormProps> = ({
           <div className="flex justify-between items-center">
             <Button
               type="submit"
-              className="bg-blue-500 hover:bg-blue-600 text-white"
             >
               Войти
             </Button>

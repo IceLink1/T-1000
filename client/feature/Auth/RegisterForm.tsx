@@ -66,13 +66,13 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
   return (
     <div
       className={clsx(
-        "fixed inset-0 bg-black/50 flex items-center justify-center z-50",
+        "fixed inset-0 bg-black/50 flex items-center justify-center z-50 ",
         styles["authPopup"]
       )}
       onClick={onClose}
     >
       <div
-        className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-md w-full"
+        className="bg-white dark:bg-gray-800 p-10 rounded-lg shadow-lg max-w-md w-full"
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-xl font-bold mb-4">Регистрация нового ученика</h2>
@@ -136,12 +136,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
           {success && <p className="text-green-500 mb-4">{success}</p>}
 
           <div className="flex justify-between items-center">
-            <Button
-              type="submit"
-              className="bg-blue-500 hover:bg-blue-600 text-white"
-            >
-              Зарегистрироваться
-            </Button>
+            <Button type="submit">Зарегистрироваться</Button>
 
             <button
               type="button"
@@ -154,7 +149,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
         </form>
 
         <button
-          className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+          className="absolute top-2 right-2  text-gray-500 hover:text-gray-700"
           onClick={onClose}
         >
           ✕
