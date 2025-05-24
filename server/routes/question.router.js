@@ -6,21 +6,43 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
-    const { subject, limit = 10, cursor = 1 } = req.query;
+    const { subject, currentClass, limit = 10 } = req.query;
 
-    if (subject) {
-      const questionList = await Question.find({
-        subject,
-      })
-        .limit(limit)
-        .skip(cursor - 1)
-        .sort({ createdAt: Math.random() < 0.5 ? -1 : 1 });
-      // .aggregate([{ $sample: { size: parseInt(limit) } }])
-      return res.json({ questionList, cursor: cursor + 1 });
-    } else {
-      const questionList = await Question.find().limit(limit);
+    // Преобразуем limit в число
+    const sampleLimit = parseInt(limit);
+
+    // Если указан subject и currentClass — фильтруем и возвращаем случайные вопросы
+    if (subject && currentClass) {
+      const questionList = await Question.aggregate([
+        { $match: { subject, currentClass } },
+        { $sample: { size: sampleLimit } },
+      ]);
       return res.json({ questionList });
     }
+
+    // Если только subject
+    if (subject) {
+      const questionList = await Question.aggregate([
+        { $match: { subject } },
+        { $sample: { size: sampleLimit } },
+      ]);
+      return res.json({ questionList });
+    }
+
+    // Если только currentClass
+    if (currentClass) {
+      const questionList = await Question.aggregate([
+        { $match: { currentClass } },
+        { $sample: { size: sampleLimit } },
+      ]);
+      return res.json({ questionList });
+    }
+
+    // Без фильтрации — просто случайные вопросы
+    const questionList = await Question.aggregate([
+      { $sample: { size: sampleLimit } },
+    ]);
+    return res.json({ questionList });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -28,7 +50,6 @@ router.get("/", async (req, res) => {
 
 router.post("/", checkRole, async (req, res) => {
   const question = new Question({
-    title: req.body.title,
     question: req.body.question,
     answers: req.body.answers,
     correct: req.body.correct,
@@ -37,7 +58,6 @@ router.post("/", checkRole, async (req, res) => {
   });
 
   if (
-    !question.title ||
     !question.question ||
     !question.subject ||
     !question.correct ||

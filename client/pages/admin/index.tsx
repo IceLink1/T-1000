@@ -59,7 +59,6 @@ export default function AdminPage() {
   const handleAddQuestion = (e: React.FormEvent) => {
     e.preventDefault();
     const newQuestionData = {
-      title: newQuestion,
       question: newQuestion,
       answers: options.filter((option) => option.trim() !== ""),
       correct: correctAnswer,

@@ -9,14 +9,16 @@ export const fetchQuestions = createAsyncThunk(
   async ({
     subject,
     currentClass,
+    limit = 10,
   }: {
     subject: string | null;
     currentClass: string | null;
+    limit?: number | null;
   }) => {
     console.log(subject);
 
     const response = await axios.get(
-      `${API_URL}/questions${subject ? `?subject=${subject}&class=${currentClass}` : ""}`
+      `${API_URL}/questions${subject ? `?subject=${subject}&class=${currentClass}&limit=${limit}` : ""}`
     );
     return response.data;
   }
